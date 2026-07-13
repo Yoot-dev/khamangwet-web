@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('lore_entries', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); $table->foreignId('lore_category_id')->constrained()->cascadeOnDelete(); $table->string('title'); $table->string('slug')->unique(); $table->text('excerpt')->nullable(); $table->longText('content')->nullable(); $table->string('cover_image_path')->nullable(); $table->enum('status',['draft','published'])->default('draft')->index(); $table->unsignedInteger('sort_order')->default(0); $table->timestamp('published_at')->nullable(); $table->timestamps(); $table->softDeletes();
         });
     }
 
