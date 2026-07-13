@@ -1,6 +1,6 @@
 <?php
 use App\Http\Controllers\{HomeController,EpisodeController,CharacterController,LoreController};
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\{DashboardController,EpisodeController as AdminEpisodeController};
 use Illuminate\Support\Facades\Route;
 Route::get('/', HomeController::class)->name('home');
 Route::get('/episodes',[EpisodeController::class,'index'])->name('episodes.index');
@@ -11,4 +11,4 @@ Route::get('/lore',[LoreController::class,'index'])->name('lore.index');
 Route::get('/lore/{category:slug}/{entry:slug}',[LoreController::class,'show'])->name('lore.show');
 Route::get('/about',fn()=>view('about'))->name('about');
 Route::get('/support',fn()=>view('support'))->name('support');
-Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(fn()=>Route::get('/',DashboardController::class)->name('dashboard'));
+Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(function(){ Route::get('/',DashboardController::class)->name('dashboard'); Route::resource('episodes',AdminEpisodeController::class)->except('show'); });
