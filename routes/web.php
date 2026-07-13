@@ -1,0 +1,14 @@
+<?php
+use App\Http\Controllers\{HomeController,EpisodeController,CharacterController,LoreController};
+use App\Http\Controllers\Admin\DashboardController;
+use Illuminate\Support\Facades\Route;
+Route::get('/', HomeController::class)->name('home');
+Route::get('/episodes',[EpisodeController::class,'index'])->name('episodes.index');
+Route::get('/episodes/{episode:slug}',[EpisodeController::class,'show'])->name('episodes.show');
+Route::get('/characters',[CharacterController::class,'index'])->name('characters.index');
+Route::get('/characters/{character:slug}',[CharacterController::class,'show'])->name('characters.show');
+Route::get('/lore',[LoreController::class,'index'])->name('lore.index');
+Route::get('/lore/{category:slug}/{entry:slug}',[LoreController::class,'show'])->name('lore.show');
+Route::get('/about',fn()=>view('about'))->name('about');
+Route::get('/support',fn()=>view('support'))->name('support');
+Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(fn()=>Route::get('/',DashboardController::class)->name('dashboard'));

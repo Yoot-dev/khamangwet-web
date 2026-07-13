@@ -1,0 +1,3 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\{Model,SoftDeletes}; use Illuminate\Database\Eloquent\Factories\HasFactory;
+class Episode extends Model { use HasFactory,SoftDeletes; protected $fillable=['episode_number','title','slug','excerpt','content','cover_image_path','status','is_featured','published_at','created_by']; protected $casts=['published_at'=>'datetime','is_featured'=>'boolean']; public function scopePublished($q){return $q->where('status','published')->where('published_at','<=',now());} public function audioTracks(){return $this->hasMany(EpisodeAudioTrack::class);} }

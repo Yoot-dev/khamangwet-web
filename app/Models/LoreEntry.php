@@ -1,0 +1,1 @@
+<?php namespace App\Models; use Illuminate\Database\Eloquent\{Model,SoftDeletes}; class LoreEntry extends Model {use SoftDeletes;protected $guarded=[];public function category(){return $this->belongsTo(LoreCategory::class,'lore_category_id');}}
