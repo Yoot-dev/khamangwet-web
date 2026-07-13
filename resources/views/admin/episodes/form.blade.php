@@ -1,1 +1,41 @@
-<x-layouts.app title="{{$episode->exists?'แก้ไขตอน':'เพิ่มตอน'}} | ขมังเวทย์"><section class="shell max-w-4xl py-10"><h1 class="text-3xl font-bold">{{$episode->exists?'แก้ไขตอน':'เพิ่มตอน'}}</h1>@if($errors->any())<div class="mt-5 rounded-lg bg-rose-500/10 p-4 text-rose-200">กรุณาตรวจสอบข้อมูลอีกครั้ง</div>@endif<form class="panel mt-7 space-y-5 p-6" method="post" action="{{$episode->exists?route('admin.episodes.update',$episode):route('admin.episodes.store')}}">@csrf @if($episode->exists)@method('PUT')@endif<label class="block">หมายเลขตอน<input class="mt-2 w-full rounded-lg bg-white/5 p-3" name="episode_number" type="number" value="{{old('episode_number',$episode->episode_number)}}"></label><label class="block">ชื่อตอน<input class="mt-2 w-full rounded-lg bg-white/5 p-3" name="title" value="{{old('title',$episode->title)}}"></label><label class="block">คำโปรย<textarea class="mt-2 w-full rounded-lg bg-white/5 p-3" name="excerpt">{{old('excerpt',$episode->excerpt)}}</textarea></label><label class="block">เนื้อหา<textarea class="mt-2 min-h-80 w-full rounded-lg bg-white/5 p-3" name="content">{{old('content',$episode->content)}}</textarea></label><label class="block">สถานะ<select class="mt-2 w-full rounded-lg bg-white/5 p-3" name="status">@foreach(['draft'=>'ร่าง','scheduled'=>'ตั้งเวลา','published'=>'เผยแพร่'] as $value=>$label)<option value="{{$value}}" @selected(old('status',$episode->status)===$value)>{{$label}}</option>@endforeach</select></label><button class="violet-btn">บันทึก</button></form></section></x-layouts.app>
+<x-layouts.app :title="($episode->exists ? 'แก้ไขตอน' : 'เพิ่มตอน').' | ขมังเวทย์'">
+    <section class="shell max-w-4xl py-10">
+        <h1 class="text-3xl font-bold">{{ $episode->exists ? 'แก้ไขตอน' : 'เพิ่มตอน' }}</h1>
+
+        @if ($errors->any())
+            <div class="mt-5 rounded-lg bg-rose-500/10 p-4 text-rose-200">กรุณาตรวจสอบข้อมูลอีกครั้ง</div>
+        @endif
+
+        <form class="panel mt-7 space-y-5 p-6" method="post" enctype="multipart/form-data" action="{{ $episode->exists ? route('admin.episodes.update', $episode) : route('admin.episodes.store') }}">
+            @csrf
+            @if ($episode->exists) @method('PUT') @endif
+
+            <label class="block">หมายเลขตอน
+                <input class="mt-2 w-full rounded-lg bg-white/5 p-3" name="episode_number" type="number" value="{{ old('episode_number', $episode->episode_number) }}">
+            </label>
+            <label class="block">ชื่อตอน
+                <input class="mt-2 w-full rounded-lg bg-white/5 p-3" name="title" value="{{ old('title', $episode->title) }}">
+            </label>
+            <label class="block">รูปปกตอน <span class="text-sm text-slate-400">JPG, PNG หรือ WebP (ไม่เกิน 5 MB)</span>
+                <input class="mt-2 block w-full rounded-lg bg-white/5 p-3 text-sm" name="cover_image" type="file" accept="image/jpeg,image/png,image/webp">
+                @if ($episode->cover_image_path)
+                    <img class="mt-3 aspect-video w-56 rounded-lg object-cover" src="/{{ $episode->cover_image_path }}" alt="รูปปกปัจจุบัน">
+                @endif
+            </label>
+            <label class="block">คำโปรย
+                <textarea class="mt-2 w-full rounded-lg bg-white/5 p-3" name="excerpt">{{ old('excerpt', $episode->excerpt) }}</textarea>
+            </label>
+            <label class="block">เนื้อหา
+                <textarea class="mt-2 min-h-80 w-full rounded-lg bg-white/5 p-3" name="content">{{ old('content', $episode->content) }}</textarea>
+            </label>
+            <label class="block">สถานะ
+                <select class="mt-2 w-full rounded-lg bg-white/5 p-3" name="status">
+                    @foreach (['draft' => 'ร่าง', 'scheduled' => 'ตั้งเวลา', 'published' => 'เผยแพร่'] as $value => $label)
+                        <option value="{{ $value }}" @selected(old('status', $episode->status) === $value)>{{ $label }}</option>
+                    @endforeach
+                </select>
+            </label>
+            <button class="violet-btn">บันทึก</button>
+        </form>
+    </section>
+</x-layouts.app>
