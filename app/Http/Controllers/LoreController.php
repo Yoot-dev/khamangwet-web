@@ -1,10 +1,1 @@
-<?php
-
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-
-class LoreController extends Controller
-{
-    //
-}
+<?php namespace App\Http\Controllers; use App\Models\{LoreCategory,LoreEntry}; class LoreController extends Controller {public function index(){return view('lore.index',['categories'=>LoreCategory::with('entries')->orderBy('sort_order')->get()]);}public function show(LoreCategory $category,LoreEntry $entry){abort_unless($entry->lore_category_id===$category->id&&$entry->status==='published',404);return view('lore.show',compact('category','entry'));}}

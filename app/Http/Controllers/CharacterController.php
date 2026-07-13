@@ -1,10 +1,1 @@
-<?php
-
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-
-class CharacterController extends Controller
-{
-    //
-}
+<?php namespace App\Http\Controllers; use App\Models\Character; class CharacterController extends Controller {public function index(){return view('characters.index',['characters'=>Character::where('is_published',true)->orderBy('sort_order')->get()]);}public function show(Character $character){abort_unless($character->is_published,404);return view('characters.show',compact('character'));}}

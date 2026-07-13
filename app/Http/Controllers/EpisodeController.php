@@ -1,10 +1,1 @@
-<?php
-
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-
-class EpisodeController extends Controller
-{
-    //
-}
+<?php namespace App\Http\Controllers; use App\Models\Episode; use Illuminate\Http\Request; class EpisodeController extends Controller {public function index(Request $r){return view('episodes.index',['episodes'=>Episode::published()->orderByDesc('episode_number')->paginate(12)]);} public function show(Episode $episode){abort_unless($episode->status==='published',404);return view('episodes.show',compact('episode'));}}
